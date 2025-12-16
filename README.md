@@ -1,12 +1,12 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="" />
+<img width="1200" height="475" alt="Banner" src="" />
 </div>
 
 # Run and deploy your app
 
 This contains everything you need to run your app locally.
 
-View your app : https://traffic-rnn.vercel.app/
+View app : https://trafficrnn-e-learning-unpam-production.up.railway.app/
 
 ## Run Locally
 

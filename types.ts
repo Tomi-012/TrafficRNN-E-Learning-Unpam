@@ -20,7 +20,8 @@ export interface TrafficSimulationResult {
 export enum Tab {
   VISUALIZER = 'visualizer',
   PLAYGROUND = 'playground',
-  PYTHON_LAB = 'python_lab'
+  PYTHON_LAB = 'python_lab',
+  FLOWCHART = 'flowchart'
 }
 
 export interface CodeSnippet {

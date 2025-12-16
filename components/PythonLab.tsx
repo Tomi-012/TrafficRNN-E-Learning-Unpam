@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Copy, Check, Code2, Play, Terminal, RefreshCw, Download, HelpCircle, X, FileSpreadsheet, Database, FileText, Cpu, Clipboard } from 'lucide-react';
+import { Copy, Check, Code2, Play, Terminal, RefreshCw, Download, HelpCircle, X, FileSpreadsheet, Database, FileText, Cpu, Workflow } from 'lucide-react';
 import { CodeSnippet } from '../types';
 import { simulatePythonExecution, generateAllScenariosCSV } from '../services/geminiService';
 
 const SNIPPETS: CodeSnippet[] = [
-  {
-    title: '1. dataset_generator.py',
-    description: 'Script untuk membangkitkan data dummy (CSV) dengan parameter Jumlah Mahasiswa yang sesuai skenario nyata.',
-    code: `import numpy as np
+    {
+        title: '1. dataset_generator.py',
+        description: 'Script untuk membangkitkan data dummy (CSV) dengan parameter Jumlah Mahasiswa yang sesuai skenario nyata.',
+        code: `import numpy as np
 import pandas as pd
 import os
 
@@ -101,11 +101,11 @@ def generate_traffic_data():
 
 if __name__ == "__main__":
     generate_traffic_data()`
-  },
-  {
-    title: '2. traffic_forecast.py',
-    description: 'Script Utama (Advanced). Memproses SEMUA skenario dan menghasilkan Dashboard Interaktif dengan Dropdown.',
-    code: `import pandas as pd
+    },
+    {
+        title: '2. traffic_forecast.py',
+        description: 'Script Utama (Advanced). Memproses SEMUA skenario dan menghasilkan Dashboard Interaktif dengan Dropdown.',
+        code: `import pandas as pd
 import numpy as np
 import json
 import webbrowser
@@ -453,19 +453,19 @@ if __name__ == "__main__":
             except:
                 print("Gagal membuka otomatis.")
 `
-  },
-  {
-    title: '3. requirements.txt',
-    description: 'Daftar library yang harus diinstall sebelum menjalankan program. Gunakan perintah: pip install -r requirements.txt',
-    code: `numpy
+    },
+    {
+        title: '3. requirements.txt',
+        description: 'Daftar library yang harus diinstall sebelum menjalankan program. Gunakan perintah: pip install -r requirements.txt',
+        code: `numpy
 pandas
 torch
 scikit-learn`
-  },
-  {
-    title: '4. README_PANDUAN.txt',
-    description: 'Instruksi lengkap cara menjalankan program ini di komputer lokal.',
-    code: `=================================================
+    },
+    {
+        title: '4. README_PANDUAN.txt',
+        description: 'Instruksi lengkap cara menjalankan program ini di komputer lokal.',
+        code: `=================================================
 PANDUAN MENJALANKAN SIMULASI TRAFIK UNPAM (PYTHON)
 =================================================
 
@@ -521,13 +521,13 @@ LANGKAH - LANGKAH STANDAR:
 
 SELAMAT MENCOBA!
 `
-  }
+    }
 ];
 
 // Inline Component for Copy Button to manage state individually
 const CopyBtn = ({ text }: { text: string }) => {
     const [copied, setCopied] = useState(false);
-    
+
     const handleCopy = () => {
         navigator.clipboard.writeText(text);
         setCopied(true);
@@ -535,7 +535,7 @@ const CopyBtn = ({ text }: { text: string }) => {
     };
 
     return (
-        <button 
+        <button
             onClick={handleCopy}
             className="p-1.5 bg-white/10 hover:bg-white/20 rounded-md text-slate-300 transition-colors ml-auto"
             title="Copy command"
@@ -545,301 +545,330 @@ const CopyBtn = ({ text }: { text: string }) => {
     );
 };
 
-const PythonLab: React.FC = () => {
-  const [activeTab, setActiveTab] = useState(0);
-  const [copied, setCopied] = useState(false);
-  const [output, setOutput] = useState<string>('');
-  const [isRunning, setIsRunning] = useState(false);
-  const [showGuide, setShowGuide] = useState(false);
+type PythonLabProps = {
+    onOpenFlowchart?: () => void;
+};
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(SNIPPETS[activeTab].code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+const PythonLab: React.FC<PythonLabProps> = ({ onOpenFlowchart }) => {
+    const [activeTab, setActiveTab] = useState(0);
+    const [copied, setCopied] = useState(false);
+    const [output, setOutput] = useState<string>('');
+    const [isRunning, setIsRunning] = useState(false);
+    const [showGuide, setShowGuide] = useState(false);
 
-  const handleDownloadCode = () => {
-    const element = document.createElement("a");
-    const file = new Blob([SNIPPETS[activeTab].code], {type: 'text/plain'});
-    element.href = URL.createObjectURL(file);
-    const filename = SNIPPETS[activeTab].title.split(' ')[1];
-    element.download = filename;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  };
+    const handleCopy = () => {
+        navigator.clipboard.writeText(SNIPPETS[activeTab].code);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
-  const handleRun = async () => {
-    setIsRunning(true);
-    setOutput("Initializing Python environment...\nRunning script...");
-    const result = await simulatePythonExecution(SNIPPETS[activeTab].code);
-    setOutput(result);
-    setIsRunning(false);
-  };
-  
-  // Helper to scroll to top (TARGETING THE MAIN SCROLL CONTAINER IN APP.TSX)
-  const scrollToTop = () => {
-    const mainContainer = document.getElementById('main-scroll');
-    if (mainContainer) {
-        mainContainer.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
+    const handleDownloadCode = () => {
+        const element = document.createElement("a");
+        const file = new Blob([SNIPPETS[activeTab].code], { type: 'text/plain' });
+        element.href = URL.createObjectURL(file);
+        const filename = SNIPPETS[activeTab].title.split(' ')[1];
+        element.download = filename;
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    };
 
-  React.useEffect(() => {
-    setOutput('');
-    setIsRunning(false);
-  }, [activeTab]);
+    const handleRun = async () => {
+        setIsRunning(true);
+        setOutput("Initializing Python environment...\nRunning script...");
+        const result = await simulatePythonExecution(SNIPPETS[activeTab].code);
+        setOutput(result);
+        setIsRunning(false);
+    };
 
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-full relative items-start">
-      
-      {/* Sidebar List - STICKY FIX */}
-      {/* 'md:sticky md:top-0' ensures it stays visible when main container scrolls */}
-      <div className="md:col-span-4 flex flex-col space-y-4 md:sticky md:top-0 self-start md:max-h-[calc(100vh-8rem)] md:overflow-y-auto custom-scrollbar">
-        <div>
-            <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-white flex items-center drop-shadow-md">
-                    <Code2 className="mr-2 text-yellow-400" />
-                    File Project
-                </h3>
-                <button 
-                    onClick={() => setShowGuide(true)}
-                    className="text-xs bg-slate-800 hover:bg-slate-700 text-cyan-400 px-3 py-1.5 rounded-full flex items-center gap-1 transition-colors border border-cyan-500/20 shadow-lg"
-                >
-                    <HelpCircle size={12} /> Panduan
-                </button>
-            </div>
+    // Helper to scroll to top (TARGETING THE MAIN SCROLL CONTAINER IN APP.TSX)
+    const scrollToTop = () => {
+        const mainContainer = document.getElementById('main-scroll');
+        if (mainContainer) {
+            mainContainer.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
 
-            <div className="space-y-2">
-                {SNIPPETS.map((snippet, idx) => {
-                    let Icon = FileText;
-                    if (snippet.title.includes('py')) Icon = Code2;
-                    if (snippet.title.includes('dataset')) Icon = Database;
-                    if (snippet.title.includes('forecast')) Icon = Cpu;
+    React.useEffect(() => {
+        setOutput('');
+        setIsRunning(false);
+    }, [activeTab]);
 
-                    return (
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-full relative items-start">
+
+            {/* Sidebar List - STICKY FIX */}
+            {/* 'md:sticky md:top-0' ensures it stays visible when main container scrolls */}
+            <div className="md:col-span-4 flex flex-col space-y-4 md:sticky md:top-0 self-start md:max-h-[calc(100vh-8rem)] md:overflow-y-auto custom-scrollbar">
+                <div>
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-xl font-bold text-white flex items-center drop-shadow-md">
+                            <Code2 className="mr-2 text-yellow-400" />
+                            File Project
+                        </h3>
                         <button
-                            key={idx}
-                            onClick={() => {
-                                setActiveTab(idx);
-                                scrollToTop(); 
-                            }}
-                            className={`w-full text-left p-4 rounded-lg border transition-all backdrop-blur-sm flex items-start gap-3 ${
-                            activeTab === idx 
-                                ? 'bg-blue-900/40 border-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.2)]' 
-                                : 'bg-slate-900/40 border-white/5 text-slate-400 hover:bg-slate-800/50 hover:border-white/10'
-                            }`}
+                            onClick={() => setShowGuide(true)}
+                            className="text-xs bg-slate-800 hover:bg-slate-700 text-cyan-400 px-3 py-1.5 rounded-full flex items-center gap-1 transition-colors border border-cyan-500/20 shadow-lg"
                         >
-                            <div className={`mt-1 ${activeTab === idx ? 'text-cyan-400' : 'text-slate-500'}`}>
-                                <Icon size={18} />
-                            </div>
-                            <div className="overflow-hidden">
-                                <div className="font-bold text-sm mb-1 truncate">{snippet.title}</div>
-                                <div className="text-xs opacity-70 truncate">{snippet.description}</div>
-                            </div>
+                            <HelpCircle size={12} /> Panduan
                         </button>
-                    );
-                })}
-            </div>
-        </div>
-
-        {/* Quick Download All Card */}
-        <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 border border-white/10 rounded-xl p-4 shadow-lg">
-             <h4 className="text-white font-bold text-sm mb-2 flex items-center gap-2">
-                <Database size={16} className="text-emerald-400" />
-                Download Dataset Langsung
-             </h4>
-             <p className="text-xs text-slate-400 mb-3">
-                Opsional: Jika malas menjalankan script generator, download CSV jadinya di sini.
-             </p>
-             <button 
-                onClick={() => {
-                    const csvContent = generateAllScenariosCSV();
-                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.setAttribute("download", "traffic_dataset.csv");
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }}
-                className="w-full py-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all hover:shadow-[0_0_10px_rgba(16,185,129,0.2)]"
-            >
-                <FileSpreadsheet size={14} />
-                Download traffic_dataset.csv
-             </button>
-        </div>
-      </div>
-
-      {/* Code Editor Area */}
-      <div className="md:col-span-8 flex flex-col gap-4">
-        
-        <div className="flex-1 flex flex-col bg-slate-950/60 backdrop-blur-xl rounded-xl border border-white/10 overflow-hidden shadow-2xl ring-1 ring-white/5 h-[400px] md:h-auto min-h-[400px]">
-            <div className="flex justify-between items-center px-4 py-3 bg-white/5 border-b border-white/5">
-                <div className="flex items-center space-x-4">
-                    <div className="flex space-x-2">
-                        <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-sm"></div>
-                        <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-sm"></div>
-                        <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-sm"></div>
                     </div>
-                    <span className="text-xs font-mono text-slate-400 font-bold hidden sm:inline-block">
-                        {SNIPPETS[activeTab].title.split(' ')[1]}
-                    </span>
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                    {/* Run Button only for Python files */}
-                    {SNIPPETS[activeTab].title.includes('.py') && (
-                        <button 
-                            onClick={handleRun}
-                            disabled={isRunning}
-                            className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
-                                isRunning 
-                                ? 'bg-slate-700 text-slate-400 cursor-not-allowed' 
-                                : 'bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20'
-                            }`}
-                        >
-                            {isRunning ? <RefreshCw size={14} className="animate-spin" /> : <Play size={14} />}
-                            <span className="hidden sm:inline">Simulasi Run</span>
-                        </button>
+
+                    {/* Flowchart Feature Card - PROMINENT */}
+                    {onOpenFlowchart && (
+                        <div className="bg-gradient-to-br from-blue-900/40 via-cyan-900/30 to-slate-900/40 border-2 border-cyan-500/40 rounded-xl p-4 shadow-xl shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all mb-4 relative overflow-hidden">
+                            {/* Animated background effect */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-blue-500/5 to-cyan-500/5 animate-pulse"></div>
+
+                            <div className="relative z-10">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <div className="p-2 bg-cyan-500/20 rounded-lg border border-cyan-400/30">
+                                        <Workflow size={20} className="text-cyan-300" />
+                                    </div>
+                                    <h4 className="text-white font-bold text-sm">Flowchart RNN Pipeline</h4>
+                                </div>
+                                <p className="text-slate-300 text-xs mb-3 leading-relaxed">
+                                    Lihat visualisasi lengkap <strong className="text-cyan-300">alur kerja Deep Learning (RNN)</strong> dari dataset generation hingga dashboard interaktif.
+                                </p>
+                                <button
+                                    onClick={onOpenFlowchart}
+                                    className="w-full py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-sm rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:scale-[1.02]"
+                                >
+                                    <Workflow size={16} />
+                                    Buka Flowchart Lengkap
+                                </button>
+                            </div>
+                        </div>
                     )}
 
-                    <button 
-                        onClick={handleDownloadCode}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-md text-slate-300 hover:text-white transition-colors text-xs font-medium"
-                        title="Download File Ini"
-                    >
-                        <Download size={14} />
-                        <span className="hidden sm:inline">Download</span>
-                    </button>
+                    <div className="space-y-2">
+                        {SNIPPETS.map((snippet, idx) => {
+                            let Icon = FileText;
+                            if (snippet.title.includes('py')) Icon = Code2;
+                            if (snippet.title.includes('dataset')) Icon = Database;
+                            if (snippet.title.includes('forecast')) Icon = Cpu;
 
-                    <button 
-                        onClick={handleCopy}
-                        className="p-1.5 hover:bg-white/10 rounded-md text-slate-400 hover:text-white transition-colors"
-                        title="Copy Code"
-                    >
-                        {copied ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}
-                    </button>
+                            return (
+                                <button
+                                    key={idx}
+                                    onClick={() => {
+                                        setActiveTab(idx);
+                                        scrollToTop();
+                                    }}
+                                    className={`w-full text-left p-4 rounded-lg border transition-all backdrop-blur-sm flex items-start gap-3 ${activeTab === idx
+                                            ? 'bg-blue-900/40 border-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.2)]'
+                                            : 'bg-slate-900/40 border-white/5 text-slate-400 hover:bg-slate-800/50 hover:border-white/10'
+                                        }`}
+                                >
+                                    <div className={`mt-1 ${activeTab === idx ? 'text-cyan-400' : 'text-slate-500'}`}>
+                                        <Icon size={18} />
+                                    </div>
+                                    <div className="overflow-hidden">
+                                        <div className="font-bold text-sm mb-1 truncate">{snippet.title}</div>
+                                        <div className="text-xs opacity-70 truncate">{snippet.description}</div>
+                                    </div>
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
-            </div>
-            
-            <div className="flex-1 overflow-auto p-4 custom-scrollbar bg-[#0d1117]">
-                <pre className="font-mono text-sm text-blue-100 leading-relaxed overflow-x-auto">
-                    <code>{SNIPPETS[activeTab].code}</code>
-                </pre>
-            </div>
-        </div>
 
-        {/* Terminal Output Area */}
-        <div className="h-48 bg-black/80 backdrop-blur-md rounded-xl border border-white/10 overflow-hidden flex flex-col shadow-inner shrink-0">
-            <div className="px-4 py-2 bg-white/5 border-b border-white/5 flex items-center space-x-2">
-                <Terminal size={14} className="text-slate-400" />
-                <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">Terminal Output (Simulasi)</span>
-            </div>
-            <div className="flex-1 p-4 overflow-auto font-mono text-xs md:text-sm custom-scrollbar">
-                {!output && !isRunning && (
-                    <div className="text-slate-600 italic space-y-2">
-                        <p>Output eksekusi program akan muncul di sini.</p>
-                        <p>Catatan: Fitur "Simulasi Run" di sini menggunakan sistem simulasi untuk meniru output Python.</p>
-                        <p className="text-cyan-600">Untuk hasil terbaik, download file dan jalankan di komputermu.</p>
-                    </div>
-                )}
-                {isRunning && (
-                    <div className="space-y-1">
-                        <span className="text-yellow-500 block">➜ python3 {SNIPPETS[activeTab].title.split(' ')[1]}</span>
-                        <span className="text-slate-400 block animate-pulse">Executing script...</span>
-                    </div>
-                )}
-                {output && (
-                    <div className="whitespace-pre-wrap text-emerald-400">
-                        <span className="text-slate-500 select-none">User@Unpam-Lab:~$ python3 {SNIPPETS[activeTab].title.split(' ')[1]}</span>
-                        <br/>
-                        {output}
-                    </div>
-                )}
-            </div>
-        </div>
-
-      </div>
-
-      {/* Guide Modal Overlay - USING PORTAL to break out of motion.div containing block */}
-      {showGuide && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-slate-900 border border-white/10 rounded-xl max-w-2xl w-full shadow-2xl p-6 relative overflow-y-auto max-h-[90vh]">
-                <button 
-                    onClick={() => setShowGuide(false)}
-                    className="absolute top-4 right-4 text-slate-400 hover:text-white"
-                >
-                    <X size={20} />
-                </button>
-                
-                <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                    <Terminal className="text-cyan-400" /> 
-                    Panduan Setup Lokal (Wajib Baca)
-                </h3>
-                
-                <div className="space-y-4 text-sm text-slate-300">
-                    <p className="bg-blue-900/30 p-3 rounded border border-blue-500/30">
-                        Agar tidak ada error, pastikan kamu mendownload <strong>keempat file</strong> yang ada di menu samping kiri dan menyimpannya dalam <strong>satu folder yang sama</strong>.
+                {/* Quick Download All Card */}
+                <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 border border-white/10 rounded-xl p-4 shadow-lg">
+                    <h4 className="text-white font-bold text-sm mb-2 flex items-center gap-2">
+                        <Database size={16} className="text-emerald-400" />
+                        Download Dataset Langsung
+                    </h4>
+                    <p className="text-xs text-slate-400 mb-3">
+                        Opsional: Jika malas menjalankan script generator, download CSV jadinya di sini.
                     </p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-black/40 p-3 rounded-lg border border-white/5">
-                            <span className="font-bold text-cyan-400 block mb-1">Langkah 1: Download</span>
-                            <ul className="list-disc list-inside space-y-1 text-xs">
-                                <li><code>dataset_generator.py</code></li>
-                                <li><code>traffic_forecast.py</code></li>
-                                <li><code>requirements.txt</code></li>
-                            </ul>
-                        </div>
-                        <div className="bg-black/40 p-3 rounded-lg border border-white/5 flex flex-col">
-                            <span className="font-bold text-cyan-400 block mb-1">Langkah 2: Install</span>
-                            <div className="flex items-center gap-2 bg-slate-800 p-2 rounded mt-auto">
-                                <code className="text-xs font-mono text-green-400 flex-1 overflow-x-auto whitespace-nowrap">
-                                    pip install -r requirements.txt
-                                </code>
-                                <CopyBtn text="pip install -r requirements.txt" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-black/40 p-3 rounded-lg border border-white/5">
-                        <span className="font-bold text-cyan-400 block mb-1">Langkah 3: Eksekusi Berurutan</span>
-                        <div className="space-y-2 text-xs font-mono">
-                            <div className="flex flex-col gap-1">
-                                <span className="text-slate-500">1. Buat Data:</span>
-                                <div className="flex items-center gap-2 bg-slate-800 p-2 rounded">
-                                    <code className="text-green-400 flex-1">python dataset_generator.py</code>
-                                    <CopyBtn text="python dataset_generator.py" />
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <span className="text-slate-500">2. Jalankan App:</span>
-                                <div className="flex items-center gap-2 bg-slate-800 p-2 rounded">
-                                    <code className="text-green-400 flex-1">python traffic_forecast.py</code>
-                                    <CopyBtn text="python traffic_forecast.py" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="mt-6 flex justify-end">
-                    <button 
-                        onClick={() => setShowGuide(false)}
-                        className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors font-medium text-sm"
+                    <button
+                        onClick={() => {
+                            const csvContent = generateAllScenariosCSV();
+                            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                            const url = URL.createObjectURL(blob);
+                            const link = document.createElement("a");
+                            link.href = url;
+                            link.setAttribute("download", "traffic_dataset.csv");
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }}
+                        className="w-full py-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all hover:shadow-[0_0_10px_rgba(16,185,129,0.2)]"
                     >
-                        Saya Mengerti
+                        <FileSpreadsheet size={14} />
+                        Download traffic_dataset.csv
                     </button>
                 </div>
             </div>
-        </div>,
-        document.body
-      )}
 
-    </div>
-  );
+            {/* Code Editor Area */}
+            <div className="md:col-span-8 flex flex-col gap-4">
+
+                <div className="flex-1 flex flex-col bg-slate-950/60 backdrop-blur-xl rounded-xl border border-white/10 overflow-hidden shadow-2xl ring-1 ring-white/5 h-[400px] md:h-auto min-h-[400px]">
+                    <div className="flex justify-between items-center px-4 py-3 bg-white/5 border-b border-white/5">
+                        <div className="flex items-center space-x-4">
+                            <div className="flex space-x-2">
+                                <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-sm"></div>
+                                <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-sm"></div>
+                                <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-sm"></div>
+                            </div>
+                            <span className="text-xs font-mono text-slate-400 font-bold hidden sm:inline-block">
+                                {SNIPPETS[activeTab].title.split(' ')[1]}
+                            </span>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                            {/* Run Button only for Python files */}
+                            {SNIPPETS[activeTab].title.includes('.py') && (
+                                <button
+                                    onClick={handleRun}
+                                    disabled={isRunning}
+                                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${isRunning
+                                            ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+                                            : 'bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20'
+                                        }`}
+                                >
+                                    {isRunning ? <RefreshCw size={14} className="animate-spin" /> : <Play size={14} />}
+                                    <span className="hidden sm:inline">Simulasi Run</span>
+                                </button>
+                            )}
+
+                            <button
+                                onClick={handleDownloadCode}
+                                className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-md text-slate-300 hover:text-white transition-colors text-xs font-medium"
+                                title="Download File Ini"
+                            >
+                                <Download size={14} />
+                                <span className="hidden sm:inline">Download</span>
+                            </button>
+
+                            <button
+                                onClick={handleCopy}
+                                className="p-1.5 hover:bg-white/10 rounded-md text-slate-400 hover:text-white transition-colors"
+                                title="Copy Code"
+                            >
+                                {copied ? <Check size={16} className="text-emerald-500" /> : <Copy size={16} />}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="flex-1 overflow-auto p-4 custom-scrollbar bg-[#0d1117]">
+                        <pre className="font-mono text-sm text-blue-100 leading-relaxed overflow-x-auto">
+                            <code>{SNIPPETS[activeTab].code}</code>
+                        </pre>
+                    </div>
+                </div>
+
+                {/* Terminal Output Area */}
+                <div className="h-48 bg-black/80 backdrop-blur-md rounded-xl border border-white/10 overflow-hidden flex flex-col shadow-inner shrink-0">
+                    <div className="px-4 py-2 bg-white/5 border-b border-white/5 flex items-center space-x-2">
+                        <Terminal size={14} className="text-slate-400" />
+                        <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">Terminal Output (Simulasi)</span>
+                    </div>
+                    <div className="flex-1 p-4 overflow-auto font-mono text-xs md:text-sm custom-scrollbar">
+                        {!output && !isRunning && (
+                            <div className="text-slate-600 italic space-y-2">
+                                <p>Output eksekusi program akan muncul di sini.</p>
+                                <p>Catatan: Fitur "Simulasi Run" di sini menggunakan sistem simulasi untuk meniru output Python.</p>
+                                <p className="text-cyan-600">Untuk hasil terbaik, download file dan jalankan di komputermu.</p>
+                            </div>
+                        )}
+                        {isRunning && (
+                            <div className="space-y-1">
+                                <span className="text-yellow-500 block">➜ python3 {SNIPPETS[activeTab].title.split(' ')[1]}</span>
+                                <span className="text-slate-400 block animate-pulse">Executing script...</span>
+                            </div>
+                        )}
+                        {output && (
+                            <div className="whitespace-pre-wrap text-emerald-400">
+                                <span className="text-slate-500 select-none">User@Unpam-Lab:~$ python3 {SNIPPETS[activeTab].title.split(' ')[1]}</span>
+                                <br />
+                                {output}
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+            </div>
+
+            {/* Guide Modal Overlay - USING PORTAL to break out of motion.div containing block */}
+            {showGuide && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-slate-900 border border-white/10 rounded-xl max-w-2xl w-full shadow-2xl p-6 relative overflow-y-auto max-h-[90vh]">
+                        <button
+                            onClick={() => setShowGuide(false)}
+                            className="absolute top-4 right-4 text-slate-400 hover:text-white"
+                        >
+                            <X size={20} />
+                        </button>
+
+                        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                            <Terminal className="text-cyan-400" />
+                            Panduan Setup Lokal (Wajib Baca)
+                        </h3>
+
+                        <div className="space-y-4 text-sm text-slate-300">
+                            <p className="bg-blue-900/30 p-3 rounded border border-blue-500/30">
+                                Agar tidak ada error, pastikan kamu mendownload <strong>keempat file</strong> yang ada di menu samping kiri dan menyimpannya dalam <strong>satu folder yang sama</strong>.
+                            </p>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="bg-black/40 p-3 rounded-lg border border-white/5">
+                                    <span className="font-bold text-cyan-400 block mb-1">Langkah 1: Download</span>
+                                    <ul className="list-disc list-inside space-y-1 text-xs">
+                                        <li><code>dataset_generator.py</code></li>
+                                        <li><code>traffic_forecast.py</code></li>
+                                        <li><code>requirements.txt</code></li>
+                                    </ul>
+                                </div>
+                                <div className="bg-black/40 p-3 rounded-lg border border-white/5 flex flex-col">
+                                    <span className="font-bold text-cyan-400 block mb-1">Langkah 2: Install</span>
+                                    <div className="flex items-center gap-2 bg-slate-800 p-2 rounded mt-auto">
+                                        <code className="text-xs font-mono text-green-400 flex-1 overflow-x-auto whitespace-nowrap">
+                                            pip install -r requirements.txt
+                                        </code>
+                                        <CopyBtn text="pip install -r requirements.txt" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="bg-black/40 p-3 rounded-lg border border-white/5">
+                                <span className="font-bold text-cyan-400 block mb-1">Langkah 3: Eksekusi Berurutan</span>
+                                <div className="space-y-2 text-xs font-mono">
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-slate-500">1. Buat Data:</span>
+                                        <div className="flex items-center gap-2 bg-slate-800 p-2 rounded">
+                                            <code className="text-green-400 flex-1">python dataset_generator.py</code>
+                                            <CopyBtn text="python dataset_generator.py" />
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-slate-500">2. Jalankan App:</span>
+                                        <div className="flex items-center gap-2 bg-slate-800 p-2 rounded">
+                                            <code className="text-green-400 flex-1">python traffic_forecast.py</code>
+                                            <CopyBtn text="python traffic_forecast.py" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-6 flex justify-end">
+                            <button
+                                onClick={() => setShowGuide(false)}
+                                className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors font-medium text-sm"
+                            >
+                                Saya Mengerti
+                            </button>
+                        </div>
+                    </div>
+                </div>,
+                document.body
+            )}
+
+        </div>
+    );
 };
 
 export default PythonLab;
