@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Copy, Check, Code2, Play, Terminal, RefreshCw, Download, HelpCircle, X, FileSpreadsheet, Database, FileText, Cpu, Clipboard } from 'lucide-react';
 import { CodeSnippet } from '../types';
 import { simulatePythonExecution, generateAllScenariosCSV } from '../services/geminiService';
@@ -762,9 +763,9 @@ const PythonLab: React.FC = () => {
 
       </div>
 
-      {/* Guide Modal Overlay */}
-      {showGuide && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+      {/* Guide Modal Overlay - USING PORTAL to break out of motion.div containing block */}
+      {showGuide && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
             <div className="bg-slate-900 border border-white/10 rounded-xl max-w-2xl w-full shadow-2xl p-6 relative overflow-y-auto max-h-[90vh]">
                 <button 
                     onClick={() => setShowGuide(false)}
@@ -833,7 +834,8 @@ const PythonLab: React.FC = () => {
                     </button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </div>

@@ -37,7 +37,8 @@ export default function App() {
       animation={{ scale: 60, speed: 25 }}
       noise={{ opacity: 0.2, scale: 1.5 }}
       sizing="fill"
-      className="h-screen w-screen text-slate-200 selection:bg-cyan-500/30 font-sans overflow-hidden"
+      // CHANGE: Use 'fixed inset-0' instead of 'h-screen w-screen' to strictly lock layout
+      className="fixed inset-0 text-slate-200 selection:bg-cyan-500/30 font-sans overflow-hidden"
     >
       {/* Container utama menggunakan Flex Column Full Height */}
       <div className="flex flex-col h-full">
@@ -99,8 +100,6 @@ export default function App() {
         </div>
 
         {/* Main Content - SCROLLABLE AREA */}
-        {/* 'flex-1 overflow-y-auto' memastikan area ini mengisi sisa layar dan bisa di-scroll */}
-        {/* id="main-scroll" digunakan oleh komponen lain untuk scroll-to-top */}
         <main ref={mainRef} id="main-scroll" className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar relative flex flex-col">
             <div className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <AnimatePresence mode="wait">
