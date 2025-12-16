@@ -34,7 +34,7 @@ export default function App() {
   return (
     <EtherealShadow
       color="#06b6d4" // Cyan-500
-      animation={{ scale: 60, speed: 25 }}
+      animation={{ scale: 60, speed: 45 }}
       noise={{ opacity: 0.2, scale: 1.5 }}
       sizing="fill"
       // CHANGE: Use 'fixed inset-0' instead of 'h-screen w-screen' to strictly lock layout
