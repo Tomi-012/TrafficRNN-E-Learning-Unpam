@@ -1,107 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Primary Meta Tags -->
-    <title>TrafficRNN E-Learning UNPAM | Prediksi Trafik Server dengan RNN</title>
-    <meta name="title" content="TrafficRNN E-Learning UNPAM | Prediksi Trafik Server dengan RNN" />
-    <meta name="description" content="Platform pembelajaran interaktif untuk memahami Recurrent Neural Network (RNN) dalam memprediksi beban trafik server e-learning. Dikembangkan oleh Kelompok 4 Universitas Pamulang." />
-    <meta name="keywords" content="RNN, Machine Learning, Traffic Prediction, E-Learning, UNPAM, Deep Learning, Time Series, Python, React" />
-    <meta name="author" content="Kelompok 4 - Universitas Pamulang" />
-    <meta name="robots" content="index, follow" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://trafficrnn-e-learning-unpam-production.up.railway.app/" />
-    <meta property="og:title" content="TrafficRNN E-Learning UNPAM | Prediksi Trafik Server dengan RNN" />
-    <meta property="og:description" content="Platform pembelajaran interaktif untuk memahami RNN dalam prediksi trafik server. Visualisasi, simulasi, dan coding lab dalam satu aplikasi." />
-    <meta property="og:image" content="https://trafficrnn-e-learning-unpam-production.up.railway.app/og-image.png" />
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://trafficrnn-e-learning-unpam-production.up.railway.app/" />
-    <meta property="twitter:title" content="TrafficRNN E-Learning UNPAM" />
-    <meta property="twitter:description" content="Platform pembelajaran interaktif untuk memahami RNN dalam prediksi trafik server." />
-    <meta property="twitter:image" content="https://trafficrnn-e-learning-unpam-production.up.railway.app/og-image.png" />
-    
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#06b6d4" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              mono: ['JetBrains Mono', 'monospace'],
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary Meta Tags -->
+  <title>TrafficRNN E-Learning UNPAM | Prediksi Trafik Server dengan RNN</title>
+  <meta name="title" content="TrafficRNN E-Learning UNPAM | Prediksi Trafik Server dengan RNN" />
+  <meta name="description"
+    content="Platform pembelajaran interaktif untuk memahami Recurrent Neural Network (RNN) dalam memprediksi beban trafik server e-learning. Dikembangkan oleh Kelompok 4 Universitas Pamulang." />
+  <meta name="keywords"
+    content="RNN, Machine Learning, Traffic Prediction, E-Learning, UNPAM, Deep Learning, Time Series, Python, React" />
+  <meta name="author" content="Kelompok 4 - Universitas Pamulang" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://traffic-rnn.vercel.app/" />
+  <meta property="og:title" content="TrafficRNN E-Learning UNPAM | Prediksi Trafik Server dengan RNN" />
+  <meta property="og:description"
+    content="Platform pembelajaran interaktif untuk memahami RNN dalam prediksi trafik server. Visualisasi, simulasi, dan coding lab dalam satu aplikasi." />
+  <meta property="og:image" content="https://traffic-rnn.vercel.app/og-image.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://traffic-rnn.vercel.app/" />
+  <meta property="twitter:title" content="TrafficRNN E-Learning UNPAM" />
+  <meta property="twitter:description"
+    content="Platform pembelajaran interaktif untuk memahami RNN dalam prediksi trafik server." />
+  <meta property="twitter:image" content="https://traffic-rnn.vercel.app/og-image.png" />
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#06b6d4" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            cyan: {
+              400: '#22d3ee',
+              500: '#06b6d4',
+              900: '#164e63',
             },
-            colors: {
-              cyan: {
-                400: '#22d3ee',
-                500: '#06b6d4',
-                900: '#164e63',
+            violet: {
+              500: '#8b5cf6',
+              900: '#4c1d95',
+            }
+          },
+          animation: {
+            aurora: "aurora 60s linear infinite",
+          },
+          keyframes: {
+            aurora: {
+              "0%": {
+                backgroundPosition: "50% 50%, 50% 50%",
               },
-              violet: {
-                500: '#8b5cf6',
-                900: '#4c1d95',
-              }
-            },
-            animation: {
-              aurora: "aurora 60s linear infinite",
-            },
-            keyframes: {
-              aurora: {
-                "0%": {
-                  backgroundPosition: "50% 50%, 50% 50%",
-                },
-                "100%": {
-                  backgroundPosition: "350% 50%, 350% 50%",
-                },
+              "100%": {
+                backgroundPosition: "350% 50%, 350% 50%",
               },
             },
-          }
+          },
         }
       }
-    </script>
-    <style>
-      body {
-        background-color: #020617; /* slate-950 */
-        color: #e2e8f0;
-      }
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #0f172a;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #334155;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #475569;
-      }
-      :root {
-        --black: #020617;
-        --white: #ffffff;
-        --blue-500: #3b82f6;
-        --indigo-500: #6366f1;
-        --blue-300: #93c5fd;
-        --violet-200: #ddd6fe;
-        --blue-400: #60a5fa;
-        --transparent: transparent;
-      }
-    </style>
+    }
+  </script>
+  <style>
+    body {
+      background-color: #020617;
+      /* slate-950 */
+      color: #e2e8f0;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    :root {
+      --black: #020617;
+      --white: #ffffff;
+      --blue-500: #3b82f6;
+      --indigo-500: #6366f1;
+      --blue-300: #93c5fd;
+      --violet-200: #ddd6fe;
+      --blue-400: #60a5fa;
+      --transparent: transparent;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -117,10 +130,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+
 </head>
-  <body class="dark">
-    <div id="root"></div>
+
+<body class="dark">
+  <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>

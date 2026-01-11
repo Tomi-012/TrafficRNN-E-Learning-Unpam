@@ -184,7 +184,7 @@ Project ini dibuat untuk keperluan **edukasi** di Universitas Pamulang.
 
 ## 🔗 Links
 
-- **Live Demo**: [trafficrnn-e-learning-unpam-production.up.railway.app](https://trafficrnn-e-learning-unpam-production.up.railway.app/)
+- **Live Demo**: (https://traffic-rnn.vercel.app/)
 - **Repository**: [github.com/Tomi-012/TrafficRNN-E-Learning-Unpam](https://github.com/Tomi-012/TrafficRNN-E-Learning-Unpam)
 
 ---

@@ -2,9 +2,10 @@ import { motion } from "framer-motion";
 import React, { ReactNode } from "react";
 import { cn } from "../lib/utils";
 
-interface AuroraBackgroundProps extends React.HTMLProps<HTMLDivElement> {
+interface AuroraBackgroundProps extends React.ComponentPropsWithoutRef<"div"> {
   children: ReactNode;
   showRadialGradient?: boolean;
+  className?: string;
 }
 
 export const AuroraBackground = ({
@@ -42,7 +43,7 @@ export const AuroraBackground = ({
             absolute -inset-[10px] opacity-50 will-change-transform`,
 
             showRadialGradient &&
-              `[mask-image:radial-gradient(ellipse_at_100%_0%,black_10%,transparent_70%)]`
+            `[mask-image:radial-gradient(ellipse_at_100%_0%,black_10%,transparent_70%)]`
           )}
         ></div>
       </div>
