@@ -9,7 +9,7 @@
 
 **Platform Pembelajaran Interaktif untuk Memahami RNN dalam Prediksi Trafik Server**
 
-[🌐 Live Demo](https://traffic-rnn.vercel.app/) • [📚 Dokumentasi](#fitur-utama) • [🤝 Kontribusi](#kontribusi)
+[🌐 Live Demo](https://trafficrnn-e-learning-unpam-production.up.railway.app/) • [📚 Dokumentasi](#fitur-utama) • [🤝 Kontribusi](#kontribusi)
 
 </div>
 
@@ -184,8 +184,8 @@ Project ini dibuat untuk keperluan **edukasi** di Universitas Pamulang.
 
 ## 🔗 Links
 
-- **Live Demo**: (https://traffic-rnn.vercel.app/)
-- **Repository**: [github.com/Tomi-012/TrafficRNN-E-Learning-Unpam](https://github.com/Tomi-012/TrafficRNN-E-Learning-Unpam)
+- **Live Demo**: [trafficrnn-e-learning-unpam-production.up.railway.app](https://trafficrnn-e-learning-unpam-production.up.railway.app/)
+- **Repository**: (https://github.com/Tomi-012/TrafficRNN-E-Learning-Unpam)
 
 ---
 
